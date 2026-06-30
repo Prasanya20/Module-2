@@ -1,25 +1,73 @@
+class Book {
+    int bookId;
+    String title;
+    String author;
+
+    Book(int bookId, String title, String author) {
+        this.bookId = bookId;
+        this.title = title;
+        this.author = author;
+    }
+
+    public String toString() {
+        return bookId + " " + title + " by " + author;
+    }
+}
+
 public class Main {
-    static double futureValue(double presentValue, double growthRate, int years) {
 
-        if (years == 0) {
-            return presentValue;
+    // Linear Search
+    static int linearSearch(Book books[], String key) {
+        for (int i = 0; i < books.length; i++) {
+            if (books[i].title.equalsIgnoreCase(key)) {
+                return i;
+            }
         }
+        return -1;
+    }
 
-        return futureValue(presentValue, growthRate, years - 1)
-                * (1 + growthRate);
+    // Binary Search (Books must be sorted by title)
+    static int binarySearch(Book books[], String key) {
+        int low = 0;
+        int high = books.length - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int result = books[mid].title.compareToIgnoreCase(key);
+
+            if (result == 0)
+                return mid;
+            else if (result < 0)
+                low = mid + 1;
+            else
+                high = mid - 1;
+        }
+        return -1;
     }
 
     public static void main(String[] args) {
 
-        double presentValue = 10000;   
-        double growthRate = 0.10;      
-        int years = 5;
+        // Books are already sorted by title
+        Book books[] = {
+            new Book(101, "C Programming", "Dennis Ritchie"),
+            new Book(102, "Data Structures", "Mark Allen"),
+            new Book(103, "Java Programming", "James Gosling"),
+            new Book(104, "Python Basics", "Guido van Rossum"),
+            new Book(105, "Web Development", "David Flanagan")
+        };
 
-        double result = futureValue(presentValue, growthRate, years);
+        String searchTitle = "Java Programming";
 
-        System.out.println("Present Value : Rs." + presentValue);
-        System.out.println("Growth Rate   : " + (growthRate * 100) + "%");
-        System.out.println("Years         : " + years);
-        System.out.println("Future Value  : Rs." + result);
+        int index = linearSearch(books, searchTitle);
+        if (index != -1)
+            System.out.println("Linear Search Found: " + books[index]);
+        else
+            System.out.println("Book not found.");
+
+        index = binarySearch(books, searchTitle);
+        if (index != -1)
+            System.out.println("Binary Search Found: " + books[index]);
+        else
+            System.out.println("Book not found.");
     }
 }
